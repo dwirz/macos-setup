@@ -11,12 +11,24 @@ if ! xcode-select -p >/dev/null 2>&1; then
 fi
 
 print_step "Installing Homebrew"
-run_or_die "Homebrew install" /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+ensure_brew_shellenv
+if command -v brew >/dev/null 2>&1; then
+  print_step "Homebrew already installed; skipping install"
+else
+  run_or_die "Homebrew install" /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
 
 ensure_brew_shellenv
 
 print_step "Installing oh-my-zsh"
-run_or_die "oh-my-zsh install" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+OMZ_DIR="${HOME}/.oh-my-zsh"
+if [ -d "$OMZ_DIR" ]; then
+  print_step "Oh My Zsh already present at ${OMZ_DIR}; skipping install"
+else
+  # --unattended: no exec zsh at the end (would abort the rest of setup.sh), no chsh/sudo
+  # prompts, no .zshrc overwrite prompt — safe for CI and non-interactive runs.
+  run_or_die "oh-my-zsh install" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
 
 print_step "Linking custom zsh config files"
 REPO_ROOT="$(pwd)"
