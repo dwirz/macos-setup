@@ -30,9 +30,8 @@ else
   run_or_die "oh-my-zsh install" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-print_step "Linking custom zsh config files"
-REPO_ROOT="$(pwd)"
-ln -sf "${REPO_ROOT}/configs/oh-my-zsh/custom_aliases.zsh" ~/.oh-my-zsh/custom/custom_aliases.zsh
-ln -sf "${REPO_ROOT}/configs/oh-my-zsh/custom_env_variables.zsh" ~/.oh-my-zsh/custom/custom_env_variables.zsh
-ln -sf "${REPO_ROOT}/configs/oh-my-zsh/custom_functions.zsh" ~/.oh-my-zsh/custom/custom_functions.zsh
-ln -sf "${REPO_ROOT}/configs/oh-my-zsh/custom_startup.zsh" ~/.oh-my-zsh/custom/custom_startup.zsh
+print_step "Linking ~/.zshrc and Oh My Zsh custom configs"
+ln -sf "${SETUP_ROOT}/configs/.zshrc-custom" "${HOME}/.zshrc"
+ln -sf "${SETUP_ROOT}/configs/oh-my-zsh/custom_aliases.zsh" "${HOME}/.oh-my-zsh/custom/custom_aliases.zsh"
+ln -sf "${SETUP_ROOT}/configs/oh-my-zsh/custom_env_variables.zsh" "${HOME}/.oh-my-zsh/custom/custom_env_variables.zsh"
+ln -sf "${SETUP_ROOT}/configs/oh-my-zsh/custom_functions.zsh" "${HOME}/.oh-my-zsh/custom/custom_functions.zsh"
