@@ -3,6 +3,10 @@
 print_step "Installing Brewfile packages and apps"
 run_or_die "brew bundle" brew bundle
 
+print_step "Mac App Store apps (mas; optional, non-fatal if not signed in)"
+ensure_brew_shellenv
+mas_install_optional 506189836 "Harvest"
+
 print_step "Installing OpenScreen helper tool"
 OPENSCREEN_SETUP_SCRIPT="./scripts/install-openscreen.sh"
 if [ -f "$OPENSCREEN_SETUP_SCRIPT" ]; then

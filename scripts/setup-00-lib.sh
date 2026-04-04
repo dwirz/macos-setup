@@ -32,3 +32,20 @@ ensure_brew_shellenv() {
     eval "$(/usr/local/bin/brew shellenv)"
   fi
 }
+
+# Install a Mac App Store app via mas(1). Does not exit the setup script on failure
+# (unsigned App Store session, network, region, or already installed edge cases).
+mas_install_optional() {
+  local id="$1"
+  local name="${2:-$id}"
+  if ! command -v mas >/dev/null 2>&1; then
+    echo "Skipping mas install ${name} (${id}): mas not on PATH."
+    return 0
+  fi
+  if mas install "$id"; then
+    echo "Installed ${name} (${id}) via mas."
+  else
+    echo "Note: mas install ${name} (${id}) failed — open the App Store app and sign in if needed, then run: mas install ${id}"
+  fi
+  return 0
+}

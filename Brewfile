@@ -16,6 +16,7 @@ brew "git" # Git
 brew "graphicsmagick" # Image Processing
 brew "hashicorp/tap/terraform" # Terraform
 brew "jq" # JSON Processing
+brew "mas" # Mac App Store CLI
 brew "nvm" # Node Version Manager
 brew "powerlevel10k" # Theme for ZSH
 brew "pure" # Shell Prompt
@@ -37,7 +38,6 @@ cask "1password" # Password Manager
 cask "betterdisplay" # Display Manager
 cask "caffeine" # Prevent Sleep
 cask "figma" # Design Tool
-cask "harvest" # Time Tracking
 cask "hiddenbar" # Hide Icons in Menu Bar
 cask "kap" # Screen Recording
 cask "loom" # Video Recording
