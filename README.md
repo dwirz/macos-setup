@@ -25,6 +25,8 @@ The script is **interactive** in places: it asks for your name, email, domain, a
 
 ## What `setup.sh` does (overview)
 
+[`setup.sh`](setup.sh) is a thin orchestrator: it **sources** numbered steps under [`scripts/`](scripts/) in order (`setup-00-lib.sh` helpers, then `setup-10-*.sh` … `setup-70-*.sh`). Edit those files to change behavior for a given phase.
+
 | Step | What happens |
 |------|----------------|
 | Xcode CLT | Ensures command-line tools are installed |
@@ -35,7 +37,7 @@ The script is **interactive** in places: it asks for your name, email, domain, a
 | Shell plugins | **autojump** is enabled in [`configs/oh-my-zsh/custom_startup.zsh`](configs/oh-my-zsh/custom_startup.zsh); the `autojump` formula is in [`Brewfile`](Brewfile) |
 | Profile | [`scripts/setup-dev-profile.sh`](scripts/setup-dev-profile.sh): nvm LTS Node, global npm author fields, optional `npm adduser`, global Git user and a `lg` log alias |
 | SSH | [`scripts/setup-ssh.sh`](scripts/setup-ssh.sh): interactive SSH key setup (GitHub-oriented flow) |
-| Safe Chain | Installs [Safe Chain](https://github.com/AikidoSec/safe-chain) with a **pinned version and checksum** (see `install_safe_chain` in `setup.sh` to upgrade) |
+| Safe Chain | Installs [Safe Chain](https://github.com/AikidoSec/safe-chain) with a **pinned version and checksum** (see `install_safe_chain` in [`scripts/setup-50-safe-chain-and-app-configs.sh`](scripts/setup-50-safe-chain-and-app-configs.sh) to upgrade) |
 | Config files | Copies Cursor profile, Warp theme, and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) config from `configs/` |
 | macOS | [`scripts/macos-settings.sh`](scripts/macos-settings.sh) with `sudo`: grouped **defaults** (see `--help`). In a normal terminal you are **prompted per section**; non-interactive runs apply **all** sections. From `setup.sh`, set `MACOS_SETTINGS_ALL=1` to skip prompts, or `MACOS_SETTINGS_SECTIONS=appearance,dock,finder` (example) for a fixed subset. |
 
@@ -45,19 +47,19 @@ At the end it **sources `~/.zshrc`** (from bash; a non-zero exit there is non-fa
 
 - **Apps and CLI tools**: edit [`Brewfile`](Brewfile), then run `brew bundle` (no need to re-run all of `setup.sh`).
 - **Shell**: edit files under [`configs/oh-my-zsh/`](configs/oh-my-zsh/); they are symlinked into `~/.oh-my-zsh/custom/`, so changes apply after opening a new shell or `source ~/.zshrc`.
-- **Themes / editors**: adjust files in `configs/` and re-copy paths as needed, or change `setup.sh` if you want different destinations.
+- **Themes / editors**: adjust files in `configs/` and re-copy paths as needed, or change the copy step in [`scripts/setup-50-safe-chain-and-app-configs.sh`](scripts/setup-50-safe-chain-and-app-configs.sh) if you want different destinations.
 
 ### If you fork this repo
 
 [`configs/oh-my-zsh/custom_startup.zsh`](configs/oh-my-zsh/custom_startup.zsh) is tailored to this author’s machine. Replace **hardcoded paths** before using it elsewhere:
 
 - **`NVM_DIR`** and **`ZSH`** use `/Users/dwirz/...` — switch to `$HOME` (e.g. `export NVM_DIR="$HOME/.nvm"`, `export ZSH="$HOME/.oh-my-zsh"`).
-- **Homebrew** runs `eval "$(/opt/homebrew/bin/brew shellenv)"` (Apple Silicon default). On Intel Macs, Homebrew lives under `/usr/local`; use `eval "$(brew shellenv)"` after `brew` is on your `PATH`, or mirror the pattern in [`setup.sh`](setup.sh) (`ensure_brew_shellenv`).
+- **Homebrew** runs `eval "$(/opt/homebrew/bin/brew shellenv)"` (Apple Silicon default). On Intel Macs, Homebrew lives under `/usr/local`; use `eval "$(brew shellenv)"` after `brew` is on your `PATH`, or mirror the pattern in [`scripts/setup-00-lib.sh`](scripts/setup-00-lib.sh) (`ensure_brew_shellenv`).
 - **SSH** uses `ssh-add` with **`~/.ssh/id_rsa`**; if you use another key (for example the `github` key from [`scripts/setup-ssh.sh`](scripts/setup-ssh.sh)), point `ssh-add` at that path or rely on your SSH config.
 
 ## Re-running safely
 
-Re-running `./setup.sh` may **overwrite** symlinks and some copied files, re-apply `defaults`, and repeat installers that are idempotent (Homebrew, Oh My Zsh). Review the script before relying on it on a machine you already use daily.
+Re-running `./setup.sh` may **overwrite** symlinks and some copied files, re-apply `defaults`, and repeat installers that are idempotent (Homebrew, Oh My Zsh). Review [`setup.sh`](setup.sh) and the numbered [`scripts/setup-*.sh`](scripts/) steps before relying on it on a machine you already use daily.
 
 ## License
 

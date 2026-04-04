@@ -4,33 +4,6 @@ set -euo pipefail
 # Install a user LaunchAgent that runs `tmbliss service` once daily (default: lunch).
 # Requires: tmbliss (brew), jq (brew). See https://github.com/Reeywhaar/tmbliss
 
-ensure_brew_shellenv() {
-  if [ -x /opt/homebrew/bin/brew ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  elif [ -x /usr/local/bin/brew ]; then
-    eval "$(/usr/local/bin/brew shellenv)"
-  fi
-}
-
-die() {
-  echo "Error: $*" >&2
-  exit 1
-}
-
-validate_time() {
-  local t="$1" h m
-  [[ "$t" =~ ^([0-9]+):([0-9]+)$ ]] || return 1
-  h="${BASH_REMATCH[1]}"
-  m="${BASH_REMATCH[2]}"
-  if ! ((10#$h >= 0 && 10#$h <= 23)); then return 1; fi
-  if ! ((10#$m >= 0 && 10#$m <= 59)); then return 1; fi
-  HOUR=$((10#$h))
-  MINUTE=$((10#$m))
-  return 0
-}
-
-ensure_brew_shellenv
-
 if ! command -v tmbliss >/dev/null 2>&1; then
   echo "Skipping tmbliss schedule: tmbliss not found on PATH."
   exit 0

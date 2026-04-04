@@ -1,0 +1,18 @@
+# Completion banner and manual follow-ups (sourced by ../setup.sh).
+
+print_section "Setup complete"
+
+echo ""
+print_section "Manual steps remaining"
+print_step "Screen Recording permissions"
+echo "   - Open: System Settings > Privacy & Security > Screen Recording"
+echo "   - Enable for Raycast and browsers you use."
+echo ""
+print_step "Night Shift"
+echo "   - Open: System Settings > Displays > Night Shift"
+echo "   - Configure schedule and color temperature."
+echo ""
+print_step "Raycast Clipboard History"
+echo "   - Open Raycast Preferences > Extensions"
+echo "   - Enable 'Clipboard History'"
+echo "   - Optional: assign hotkey/alias"
