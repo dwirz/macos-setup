@@ -12,6 +12,7 @@ brew "git" # Git
 brew "graphicsmagick" # Image Processing
 brew "hashicorp/tap/terraform" # Terraform
 brew "jq" # JSON Processing
+brew "libmagic" # Native lib for python-magic / install-release (OpenScreen)
 brew "mas" # Mac App Store CLI
 brew "nvm" # Node Version Manager
 brew "powerlevel10k" # Theme for ZSH

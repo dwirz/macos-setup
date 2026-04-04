@@ -8,6 +8,14 @@ set -euo pipefail
 OPENSCREEN_REPO_URL="https://github.com/siddharthvaddem/openscreen"
 VENV_DIR="${HOME}/.local/share/macos-setup/venv-install-release"
 
+# install-release → python-magic needs Homebrew’s libmagic (brew "libmagic" in Brewfile).
+if command -v brew >/dev/null 2>&1; then
+  _libmagic_prefix="$(brew --prefix libmagic 2>/dev/null || true)"
+  if [ -n "${_libmagic_prefix}" ] && [ -d "${_libmagic_prefix}/lib" ]; then
+    export DYLD_LIBRARY_PATH="${_libmagic_prefix}/lib${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}"
+  fi
+fi
+
 IR_BIN=""
 if command -v ir >/dev/null 2>&1; then
   IR_BIN="$(command -v ir)"
