@@ -1,8 +1,4 @@
 tap "hashicorp/tap"
-tap "homebrew/services"
-tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/core"
 tap "netbirdio/tap"
 tap "reeywhaar/tap"
 
