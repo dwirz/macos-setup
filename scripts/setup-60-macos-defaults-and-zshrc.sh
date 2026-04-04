@@ -15,6 +15,13 @@ else
   echo "Skipping macOS settings: $MACOS_SETTINGS_SCRIPT not found."
 fi
 
-print_step "Sourcing ~/.zshrc for current shell"
-# shellcheck disable=SC1090
-source ~/.zshrc || echo "Note: ~/.zshrc returned non-zero under bash; new zsh sessions will still load it."
+print_step "Validating ~/.zshrc in zsh"
+# Oh My Zsh requires zsh ($ZSH_VERSION). setup.sh runs bash with set -u, so we must not
+# source ~/.zshrc here — that triggers "unbound variable ZSH_VERSION".
+if [ -f "${HOME}/.zshrc" ] && command -v zsh >/dev/null 2>&1; then
+  zsh -c 'source ~/.zshrc' || echo "Note: ~/.zshrc returned non-zero in zsh; fix errors above."
+elif [ ! -f "${HOME}/.zshrc" ]; then
+  echo "No ~/.zshrc found."
+else
+  echo "Skipping ~/.zshrc check: zsh not on PATH."
+fi

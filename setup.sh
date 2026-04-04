@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Fail fast: any command that returns non-zero stops the script (except where noted).
-# Optional steps use explicit if/else; final zshrc source may be skipped if incompatible with bash.
+# Optional steps use explicit if/else; setup-60 loads ~/.zshrc via zsh (not bash — Oh My Zsh needs ZSH_VERSION).
 #
 # Orchestration only: numbered steps live in scripts/setup-NN-*.sh (run order matches filenames).
 

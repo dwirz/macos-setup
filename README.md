@@ -41,7 +41,7 @@ The script is **interactive** in places: it asks for your name, email, domain, a
 | Config files | Copies Cursor profile, Warp theme, and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) config from `configs/` |
 | macOS | [`scripts/macos-settings.sh`](scripts/macos-settings.sh) with `sudo`: grouped **defaults** (see `--help`). In a normal terminal you are **prompted per section**; non-interactive runs apply **all** sections. From `setup.sh`, set `MACOS_SETTINGS_ALL=1` to skip prompts, or `MACOS_SETTINGS_SECTIONS=appearance,dock,finder` (example) for a fixed subset. |
 
-At the end it **sources `~/.zshrc`** (from bash; a non-zero exit there is non-fatal) and prints **manual follow-ups** (Screen Recording for Raycast/browsers, Night Shift, Raycast Clipboard History).
+At the end it **runs `zsh -c 'source ~/.zshrc'`** to validate the shell config (bash cannot load Oh My Zsh; a non-zero exit there is non-fatal) and prints **manual follow-ups** (Screen Recording for Raycast/browsers, Night Shift, Raycast Clipboard History).
 
 ## Customizing
 

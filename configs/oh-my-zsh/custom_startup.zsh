@@ -1,3 +1,8 @@
+# zsh only — do not source this file from bash (Oh My Zsh needs $ZSH_VERSION; bash + set -u breaks).
+case ${ZSH_VERSION-} in
+  '') return 0 ;;
+esac
+
 # Kiro CLI pre block. Keep at the top of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
 
