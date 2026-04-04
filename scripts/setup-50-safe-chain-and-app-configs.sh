@@ -38,3 +38,5 @@ run_or_die "Warp theme copy" cp -r ./configs/warp-terminal-theme.yaml ~/.warp/th
 
 print_step "Copying Powerlevel10k theme"
 run_or_die "p10k copy" cp -r ./configs/.p10k.zsh ~/.p10k.zsh
+mkdir -p "${HOME}/.oh-my-zsh/custom/themes/powerlevel10k/"
+ln -sf "${SETUP_ROOT}/configs/oh-my-zsh/themes/powerlevel10k/powerlevel10k.zsh-theme" "${HOME}/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme"
