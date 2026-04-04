@@ -18,7 +18,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Oh My Zsh setup
 export ZSH="/Users/dwirz/.oh-my-zsh"
-plugins=(git autojump docker docker-compose docker_commands)
+plugins=(git autojump docker docker-compose)
 fpath+=("$(brew --prefix)/share/zsh/site-functions")
 source "$ZSH/oh-my-zsh.sh"
 ZSH_THEME=""
