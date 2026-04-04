@@ -106,6 +106,16 @@ else
   echo "Skipping fzf integration: fzf not installed or install script missing."
 fi
 
+print_step "Optional: tmbliss daily schedule (Time Machine exclusions)"
+ensure_brew_shellenv
+TMBLISS_LAUNCHAGENT_SCRIPT="./scripts/setup-tmbliss-launchagent.sh"
+if [ -f "$TMBLISS_LAUNCHAGENT_SCRIPT" ]; then
+  chmod +x "$TMBLISS_LAUNCHAGENT_SCRIPT"
+  "$TMBLISS_LAUNCHAGENT_SCRIPT" || echo "Note: tmbliss schedule step exited non-zero; continuing setup."
+else
+  echo "Skipping tmbliss schedule: $TMBLISS_LAUNCHAGENT_SCRIPT not found."
+fi
+
 print_step "Collecting profile values (name/email/domain)"
 read -r -p "Full name [Your Name]: " NAME_INPUT
 NAME="${NAME_INPUT:-Your Name}"
