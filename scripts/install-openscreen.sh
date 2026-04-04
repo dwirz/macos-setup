@@ -2,21 +2,34 @@
 
 set -euo pipefail
 
-# Install OpenScreen (Screen Recorder) via install-release (ir)
+# Install OpenScreen (Screen Recorder) via install-release (ir).
+# Uses a dedicated venv — never `pip install` into Homebrew/system Python (PEP 668
+# "externally-managed-environment").
 OPENSCREEN_REPO_URL="https://github.com/siddharthvaddem/openscreen"
-IR_BIN="$(command -v ir || true)"
+VENV_DIR="${HOME}/.local/share/macos-setup/venv-install-release"
 
-if [ -z "$IR_BIN" ]; then
-  if command -v python3 >/dev/null 2>&1; then
-    python3 -m pip install --user -U install-release
-    IR_BIN="$(python3 -m site --user-base)/bin/ir"
-  else
-    echo "Skipping OpenScreen install: python3 not found (required to install 'ir')."
-  fi
+IR_BIN=""
+if command -v ir >/dev/null 2>&1; then
+  IR_BIN="$(command -v ir)"
+elif [ -x "${VENV_DIR}/bin/ir" ]; then
+  IR_BIN="${VENV_DIR}/bin/ir"
 fi
 
-if [ -n "$IR_BIN" ] && [ -x "$IR_BIN" ]; then
-  "$IR_BIN" get "$OPENSCREEN_REPO_URL"
+if [ -z "${IR_BIN}" ] && command -v python3 >/dev/null 2>&1; then
+  echo "Installing install-release (ir) into ${VENV_DIR} (isolated venv; avoids PEP 668)..."
+  mkdir -p "$(dirname "${VENV_DIR}")"
+  if [ ! -d "${VENV_DIR}" ]; then
+    python3 -m venv "${VENV_DIR}"
+  fi
+  "${VENV_DIR}/bin/python" -m pip install -U pip
+  "${VENV_DIR}/bin/python" -m pip install -U install-release
+  IR_BIN="${VENV_DIR}/bin/ir"
+elif [ -z "${IR_BIN}" ]; then
+  echo "Skipping OpenScreen install: python3 not found (needed for install-release)."
+fi
+
+if [ -n "${IR_BIN}" ] && [ -x "${IR_BIN}" ]; then
+  "${IR_BIN}" get "${OPENSCREEN_REPO_URL}"
 else
-  echo "Skipping OpenScreen install: 'ir' is not available."
+  echo "Skipping OpenScreen install: 'ir' is not available after install-release setup."
 fi
