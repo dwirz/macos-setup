@@ -1,4 +1,4 @@
-# Brewfile, OpenScreen, fzf, tmbliss (sourced by ../setup.sh).
+# Brewfile, OpenScreen, U.S. with German Umlauts, fzf, tmbliss (sourced by ../setup.sh).
 
 print_step "Installing Brewfile packages and apps"
 run_or_die "brew bundle" brew bundle
@@ -10,6 +10,15 @@ if [ -f "$OPENSCREEN_SETUP_SCRIPT" ]; then
   run_or_die "OpenScreen install" "$OPENSCREEN_SETUP_SCRIPT"
 else
   echo "Skipping OpenScreen install: $OPENSCREEN_SETUP_SCRIPT not found."
+fi
+
+print_step "Installing U.S. with German Umlauts keyboard layout"
+US_UMLAUTS_SCRIPT="./scripts/install-us-with-german-umlauts.sh"
+if [ -f "$US_UMLAUTS_SCRIPT" ]; then
+  chmod +x "$US_UMLAUTS_SCRIPT"
+  run_or_die "U.S. with German Umlauts" "$US_UMLAUTS_SCRIPT"
+else
+  echo "Skipping keyboard layout: $US_UMLAUTS_SCRIPT not found."
 fi
 
 print_step "Configuring fzf shell integration"
