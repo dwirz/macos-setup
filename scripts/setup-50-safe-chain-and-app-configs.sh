@@ -36,7 +36,7 @@ print_step "Copying Warp terminal theme"
 mkdir -p ~/.warp/themes/
 run_or_die "Warp theme copy" cp -r ./configs/warp-terminal-theme.yaml ~/.warp/themes/warp-terminal-theme.yaml
 
-print_step "Copying Powerlevel10k theme"
-run_or_die "p10k copy" cp -r ./configs/.p10k.zsh ~/.p10k.zsh
-mkdir -p "${HOME}/.oh-my-zsh/custom/themes/powerlevel10k/"
-ln -sf "${SETUP_ROOT}/configs/oh-my-zsh/themes/powerlevel10k/powerlevel10k.zsh-theme" "${HOME}/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme"
+print_step "Powerlevel10k: prompt config and Homebrew → Oh My Zsh theme symlink"
+ensure_brew_shellenv
+run_or_die "p10k user config copy" cp -r "${SETUP_ROOT}/configs/.p10k.zsh" "${HOME}/.p10k.zsh"
+run_or_die "Powerlevel10k (brew) → ~/.oh-my-zsh/custom/themes/powerlevel10k" link_powerlevel10k_homebrew_to_omz
