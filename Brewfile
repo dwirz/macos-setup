@@ -43,6 +43,7 @@ cask "meetingbar" # Preview Meetings in Menu Bar
 cask "netbirdio/tap/netbird-ui" # VPN
 cask "notunes" # Prevent iTunes or Apple Music from launching on ▶️-Button
 cask "raindropio" # Bookmark Manager
+cask "raycast" # Better Spotlight
 cask "reader" # Read Later Tool
 cask "rectangle" # Window Manager
 cask "shottr" # Screenshot Tool
