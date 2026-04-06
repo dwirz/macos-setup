@@ -1,10 +1,12 @@
+
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
+
 # zsh only — do not source this file from bash (Oh My Zsh needs $ZSH_VERSION; bash + set -u breaks).
 case ${ZSH_VERSION-} in
   '') return 0 ;;
 esac
 
-# Kiro CLI pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
 
 # Add SSH keys to the agent
 ssh-add -K ~/.ssh/id_rsa &> /dev/null
@@ -49,8 +51,10 @@ function nvm_auto_use() {
   fi
 }
 
-# Kiro CLI post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
 
 # Welcome the user
 echo "Welcome back" $(id -F | awk '{print $1;}')"! 🚀 (Tip: Use 'custom-aliases' to see all aliases)"
+
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
