@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "GitLab MR Page Shortcuts",
+  "version": "1.0.0",
+  "description": "Press ] to go to the next page on GitLab merge request diffs, [ to go to the previous page, o to toggle onion skin mode, m to set the added frame to 50% opacity, r to set the added frame to 100% opacity",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://gitlab.com/*/-/merge_requests/*/diffs",
+        "*://*/-/merge_requests/*/diffs"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ]
+}
