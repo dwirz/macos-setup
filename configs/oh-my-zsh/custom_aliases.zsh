@@ -1,9 +1,9 @@
 # ZSH Aliases
 alias profile="cursor ~/.zshrc" # Opens the bash profile file
 alias aliases="cursor ~/.oh-my-zsh/custom/custom_aliases.zsh" # Open this file
-alias functions="cursor ~/.oh-my-zsh/custom/custom_functions.zsh" # Open this file
-alias envvars="cursor ~/.oh-my-zsh/custom/custom_env_variables.zsh" # Open this file
-alias startup="cursor ~/.oh-my-zsh/custom/custom_startup.zsh" # Open this file
+alias functions="cursor ~/.oh-my-zsh/custom/custom_functions.zsh" # Open functions file
+alias envvars="cursor ~/.oh-my-zsh/custom/custom_env_variables.zsh" # Open env variables file
+alias startup="cursor ~/.oh-my-zsh/custom/custom_startup.zsh" # Open startup file
 
 # Directory Aliases
 alias ..="cd .." # Change directories
