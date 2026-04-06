@@ -53,3 +53,5 @@ git config --global user.name "$NAME"
 git config --global user.email "$EMAIL"
 # Improve git log
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+# Set git pull to rebase (update remote, then put commits on top of the remote)
+git config --global pull.rebase true
