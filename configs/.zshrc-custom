@@ -7,6 +7,12 @@ case ${ZSH_VERSION-} in
   '') return 0 ;;
 esac
 
+# Homebrew shell setup (Apple Silicon + Intel fallback)
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /usr/local/bin/brew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
 
 # Add SSH keys to the agent: every private key file in ~/.ssh (e.g. id_ed25519, github), then keychain identities
 for key in ~/.ssh/*(N); do
@@ -25,9 +31,13 @@ ssh-add -A &> /dev/null
 export DOCKER_BIN=$HOME/.docker/bin
 export PATH="$DOCKER_BIN:$PATH"
 
-# NVM setup
-export NVM_DIR="${HOME}/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+# nvm from manual install OR Homebrew install
+export NVM_DIR="$HOME/.nvm"
+if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+  . "$NVM_DIR/nvm.sh"
+elif [[ -s "$(brew --prefix nvm)/nvm.sh" ]]; then
+  . "$(brew --prefix nvm)/nvm.sh"
+fi
 
 # Homebrew setup
 eval "$(/opt/homebrew/bin/brew shellenv)"
