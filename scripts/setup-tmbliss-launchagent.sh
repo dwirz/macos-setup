@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+die() {
+  printf '%s\n' "$*" >&2
+  exit 1
+}
+
+# Parse 24h HH:MM into HOUR and MINUTE (integers for StartCalendarInterval). Returns 0 if valid.
+validate_time() {
+  local t="$1"
+  if [[ "$t" =~ ^([01][0-9]|2[0-3]):([0-5][0-9])$ ]]; then
+    HOUR=$((10#${BASH_REMATCH[1]}))
+    MINUTE=$((10#${BASH_REMATCH[2]}))
+    return 0
+  fi
+  return 1
+}
+
 # Install a user LaunchAgent that runs `tmbliss service` once daily (default: lunch).
 # Requires: tmbliss (brew), jq (brew). See https://github.com/Reeywhaar/tmbliss
 

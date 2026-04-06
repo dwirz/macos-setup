@@ -56,4 +56,5 @@ alias bird-link-team='netbird expose 3000 --with-user-groups smartive'
 # Other Aliases
 alias tf="terraform"
 alias tmbliss-dev="tmbliss run --path ~/projects"
+alias scheduled-jobs="grep -l -E 'StartCalendarInterval|StartInterval' ~/Library/LaunchAgents/*.plist 2>/dev/null"
 alias custom-aliases="grep -E '^[[:space:]]*alias[[:space:]]' ~/.oh-my-zsh/custom/custom_aliases.zsh"
