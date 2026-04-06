@@ -30,3 +30,8 @@ echo "   - If setup did not start the daemon: sudo netbird service install --man
 echo "   - Connect and sign in (opens the browser):"
 echo "       netbird up --management-url https://netbird.smarties.app"
 echo "   - Admin UI (optional): https://netbird.smarties.app/"
+echo ""
+print_step "Browser extensions (Chrome & Arc)"
+echo "   - Fully quit and reopen Chrome and Arc so Web Store extensions install from the manifests written by setup."
+echo "   - Local extension GitLab MR Page Shortcuts: open chrome://extensions (or Arc’s extensions page), enable Developer mode, Load unpacked →"
+echo "       <repo>/configs/chrome-extensions/gitlab-merge-request"

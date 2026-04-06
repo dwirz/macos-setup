@@ -39,15 +39,17 @@ The script is **interactive** in places: it asks for your name, email, domain, a
 | SSH | [`scripts/setup-ssh.sh`](scripts/setup-ssh.sh): interactive SSH key setup (GitHub-oriented flow) |
 | Safe Chain | Installs [Safe Chain](https://github.com/AikidoSec/safe-chain) with a **pinned version and checksum** (see `install_safe_chain` in [`scripts/setup-50-safe-chain-and-app-configs.sh`](scripts/setup-50-safe-chain-and-app-configs.sh) to upgrade) |
 | Config files | Copies Cursor profile, Warp theme, and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) config from `configs/` |
+| Browser extensions | [`scripts/install-chrome-extensions.sh`](scripts/install-chrome-extensions.sh) via [`scripts/setup-52-chrome-extensions.sh`](scripts/setup-52-chrome-extensions.sh): writes **External Extensions** JSON for **Google Chrome** and **Arc** (Web Store IDs in the script). Set `SKIP_BROWSER_EXTENSIONS=1` before `./setup.sh` to skip. |
 | macOS | [`scripts/macos-settings.sh`](scripts/macos-settings.sh) with `sudo`: grouped **defaults** (see `--help`). In a normal terminal you are **prompted per section**; non-interactive runs apply **all** sections. From `setup.sh`, set `MACOS_SETTINGS_ALL=1` to skip prompts, or `MACOS_SETTINGS_SECTIONS=appearance,dock,finder` (example) for a fixed subset. |
 
-At the end it **runs `zsh -c 'source ~/.zshrc'`** to validate the shell config (bash cannot load Oh My Zsh; a non-zero exit there is non-fatal) and prints **manual follow-ups** (Screen Recording for Raycast/browsers, Night Shift, Raycast Clipboard History).
+At the end it **runs `zsh -c 'source ~/.zshrc'`** to validate the shell config (bash cannot load Oh My Zsh; a non-zero exit there is non-fatal) and prints **manual follow-ups** (Screen Recording for Raycast/browsers, Night Shift, Raycast Clipboard History, browser extension restart and unpacked GitLab extension).
 
 ## Customizing
 
 - **Apps and CLI tools**: edit [`Brewfile`](Brewfile), then run `brew bundle` (no need to re-run all of `setup.sh`).
 - **Shell**: edit files under [`configs/oh-my-zsh/`](configs/oh-my-zsh/); they are symlinked into `~/.oh-my-zsh/custom/`, so changes apply after opening a new shell or `source ~/.zshrc`.
 - **Themes / editors**: adjust files in `configs/` and re-copy paths as needed, or change the copy step in [`scripts/setup-50-safe-chain-and-app-configs.sh`](scripts/setup-50-safe-chain-and-app-configs.sh) if you want different destinations.
+- **Browser extension lists**: edit extension IDs in [`scripts/install-chrome-extensions.sh`](scripts/install-chrome-extensions.sh). To skip the automated manifest step during `./setup.sh`, run `SKIP_BROWSER_EXTENSIONS=1 ./setup.sh`.
 
 ### If you fork this repo
 
