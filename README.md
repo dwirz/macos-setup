@@ -42,7 +42,64 @@ The script is **interactive** in places: it asks for your name, email, domain, a
 | Browser extensions | [`scripts/install-chrome-extensions.sh`](scripts/install-chrome-extensions.sh) via [`scripts/setup-52-chrome-extensions.sh`](scripts/setup-52-chrome-extensions.sh): writes **External Extensions** JSON for **Google Chrome** and **Arc** (Web Store IDs in the script). Set `SKIP_BROWSER_EXTENSIONS=1` before `./setup.sh` to skip. |
 | macOS | [`scripts/macos-settings.sh`](scripts/macos-settings.sh) with `sudo`: grouped **defaults** (see `--help`). In a normal terminal you are **prompted per section**; non-interactive runs apply **all** sections. From `setup.sh`, set `MACOS_SETTINGS_ALL=1` to skip prompts, or `MACOS_SETTINGS_SECTIONS=appearance,dock,finder` (example) for a fixed subset. |
 
-At the end it **runs `zsh -c 'source ~/.zshrc'`** to validate the shell config (bash cannot load Oh My Zsh; a non-zero exit there is non-fatal) and prints **manual follow-ups** (Screen Recording for Raycast/browsers, Night Shift, Raycast Clipboard History, browser extension restart and unpacked GitLab extension).
+At the end it **runs `zsh -c 'source ~/.zshrc'`** to validate the shell config (bash cannot load Oh My Zsh; a non-zero exit there is non-fatal) and prints a **one-line pointer** to the [manual steps after setup](#manual-steps-after-setup) section below.
+
+## Manual steps after setup
+
+Complete these in System Settings or apps as needed after `./setup.sh` finishes.
+
+**Terminal (repo root):** the same pointer `setup.sh` prints:
+
+```bash
+echo "Post-setup checklist: ${PWD}/README.md#manual-steps-after-setup"
+```
+
+### Screen Recording permissions
+
+- Open **System Settings → Privacy & Security → Screen Recording**
+- Enable for Raycast and the browsers you use
+
+### Night Shift
+
+- Open **System Settings → Displays → Night Shift**
+- Configure schedule and color temperature
+
+### Raycast Clipboard History
+
+- Open Raycast **Preferences → Extensions**
+- Enable **Clipboard History**
+- Optional: assign a hotkey or alias
+
+### U.S. with German Umlauts keyboard layout
+
+- Open **System Settings → Keyboard → Input Sources**
+- Add **U.S. with German Umlauts**
+
+### Wallpaper and lock screen
+
+- If the desktop picture did not apply: **System Settings → Privacy & Security → Automation** — allow your terminal app to control System Events.
+- If lock screen art did not apply: open **System Settings → Wallpaper** or **Lock Screen** once, then run `./scripts/apply-wallpaper-lockscreen-screensaver.sh`
+
+### NetBird (browser login)
+
+- If setup did not start the daemon:
+
+  ```bash
+  sudo netbird service install --management-url https://netbird.smarties.app && sudo netbird service start
+  ```
+
+- Connect and sign in (opens the browser):
+
+  ```bash
+  netbird up --management-url https://netbird.smarties.app
+  ```
+
+- Admin UI (optional): https://netbird.smarties.app/
+
+### Browser extensions (Chrome and Arc)
+
+- Fully quit and reopen Chrome and Arc so Web Store extensions install from the manifests written by setup.
+- Local extension **GitLab MR Page Shortcuts**: open `chrome://extensions` (or Arc’s extensions page), enable **Developer mode**, **Load unpacked** → `configs/chrome-extensions/gitlab-merge-request` (under this repo’s root)
 
 ## Customizing
 
