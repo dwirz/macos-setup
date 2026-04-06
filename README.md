@@ -110,11 +110,7 @@ echo "Post-setup checklist: ${PWD}/README.md#manual-steps-after-setup"
 
 ### If you fork this repo
 
-[`configs/oh-my-zsh/custom_startup.zsh`](configs/oh-my-zsh/custom_startup.zsh) is tailored to this author’s machine. Replace **hardcoded paths** before using it elsewhere:
-
-- **`NVM_DIR`** and **`ZSH`** use `/Users/dwirz/...` — switch to `$HOME` (e.g. `export NVM_DIR="$HOME/.nvm"`, `export ZSH="$HOME/.oh-my-zsh"`).
-- **Homebrew** runs `eval "$(/opt/homebrew/bin/brew shellenv)"` (Apple Silicon default). On Intel Macs, Homebrew lives under `/usr/local`; use `eval "$(brew shellenv)"` after `brew` is on your `PATH`, or mirror the pattern in [`scripts/setup-00-lib.sh`](scripts/setup-00-lib.sh) (`ensure_brew_shellenv`).
-- **SSH** uses `ssh-add` with **`~/.ssh/id_rsa`**; if you use another key (for example the `github` key from [`scripts/setup-ssh.sh`](scripts/setup-ssh.sh)), point `ssh-add` at that path or rely on your SSH config.
+[`configs/cursor.code-profile`](configs/cursor.code-profile) is tailored to this author’s machine. Replace **hardcoded paths** before using it elsewhere.
 
 ## Re-running safely
 
