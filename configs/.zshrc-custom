@@ -75,5 +75,8 @@ function nvm_auto_use() {
 echo "Welcome back" $(id -F | awk '{print $1;}')"! 🚀 (Tip: Use 'custom-aliases' to see all aliases)"
 
 
+# Load local env/secrets from ~/.env if present
+[[ -f "${HOME}/.env" ]] && source "${HOME}/.env"
+
 # Kiro CLI post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"

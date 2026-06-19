@@ -30,7 +30,8 @@ alias hosts="cursor /private/etc/hosts" # Open hosts file
 alias cat="bat" # Use bat as cat
 
 # Node Aliases
-alias nrd="npm run dev"
+alias nr="npm run"
+alias nrd="nr dev"
 alias nci="npm ci"
 
 # Docker Aliases
