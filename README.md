@@ -38,7 +38,7 @@ The script is **interactive** in places: it asks for your name, email, domain, a
 | Profile | [`scripts/setup-dev-profile.sh`](scripts/setup-dev-profile.sh): nvm LTS Node in `~/.nvm` (default alias `lts/*`), global npm author fields, optional `npm adduser`, global Git user and a `lg` log alias |
 | SSH | [`scripts/setup-ssh.sh`](scripts/setup-ssh.sh): interactive SSH key setup (GitHub-oriented flow) |
 | Safe Chain | Installs [Safe Chain](https://github.com/AikidoSec/safe-chain) with a **pinned version and checksum** (see `install_safe_chain` in [`scripts/setup-50-safe-chain-and-app-configs.sh`](scripts/setup-50-safe-chain-and-app-configs.sh) to upgrade) |
-| Config files | Copies the Warp theme and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) config from `configs/` (an existing, different `~/.p10k.zsh` is backed up first). The Cursor profile is imported by hand (see below). |
+| Config files | Copies the Warp theme and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) config from `configs/` (an existing, different `~/.p10k.zsh` is backed up first). |
 | Browser extensions | [`scripts/install-chrome-extensions.sh`](scripts/install-chrome-extensions.sh) via [`scripts/setup-52-chrome-extensions.sh`](scripts/setup-52-chrome-extensions.sh): writes **External Extensions** JSON for **Google Chrome** and **Arc** (Web Store IDs in the script). Set `SKIP_BROWSER_EXTENSIONS=1` before `./setup.sh` to skip. |
 | macOS | [`scripts/macos-settings.sh`](scripts/macos-settings.sh) as your user (it asks for `sudo` only for the computer name and `remove_media`): grouped **defaults** (see `--help`). In a normal terminal you are **prompted per section**; `--all` and non-interactive runs apply every section **except the destructive `remove_media`**, which runs only when chosen at the prompt or named in `--sections`. From `setup.sh`, set `MACOS_SETTINGS_ALL=1` to skip prompts, or `MACOS_SETTINGS_SECTIONS=appearance,dock,finder` (example) for a fixed subset. |
 
@@ -96,11 +96,6 @@ echo "Post-setup checklist: ${PWD}/README.md#manual-steps-after-setup"
 
 - Admin UI (optional): https://netbird.smarties.app/
 
-### Cursor profile
-
-- Cursor → **Settings → Profiles → Import Profile** → choose `configs/cursor.code-profile` (under this repo’s root).
-- The profile contains paths under `/Users/dwirz`; adjust them if your username differs.
-
 ### NetBird expose PIN
 
 - `bird-link-pin` reads the PIN from `NETBIRD_EXPOSE_PIN`. Add `NETBIRD_EXPOSE_PIN=<pin>` to `~/.env` (loaded by `~/.zshrc`, not part of this repo).
@@ -116,10 +111,6 @@ echo "Post-setup checklist: ${PWD}/README.md#manual-steps-after-setup"
 - **Shell**: edit files under [`configs/oh-my-zsh/`](configs/oh-my-zsh/); they are symlinked into `~/.oh-my-zsh/custom/`, so changes apply after opening a new shell or `source ~/.zshrc`.
 - **Themes / editors**: adjust files in `configs/` and re-copy paths as needed, or change the copy step in [`scripts/setup-50-safe-chain-and-app-configs.sh`](scripts/setup-50-safe-chain-and-app-configs.sh) if you want different destinations.
 - **Browser extension lists**: edit extension IDs in [`scripts/install-chrome-extensions.sh`](scripts/install-chrome-extensions.sh). To skip the automated manifest step during `./setup.sh`, run `SKIP_BROWSER_EXTENSIONS=1 ./setup.sh`.
-
-### If you fork this repo
-
-[`configs/cursor.code-profile`](configs/cursor.code-profile) is tailored to this author’s machine (paths under `/Users/dwirz`). Replace **hardcoded paths** before importing it elsewhere.
 
 ## Re-running safely
 

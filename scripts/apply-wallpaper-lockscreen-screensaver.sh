@@ -23,7 +23,7 @@ tell application "System Events"
 end tell
 APPLESCRIPT
 then
-  echo "Note: Setting desktop picture failed; grant Terminal/Cursor Automation for System Events if prompted." >&2
+  echo "Note: Setting desktop picture failed; grant your terminal app Automation access to System Events if prompted." >&2
 fi
 
 sleep 2

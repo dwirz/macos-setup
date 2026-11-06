@@ -55,9 +55,8 @@ cask "whatsapp" # Communication Tool
 ## Devtools
 cask "claude" # Claude desktop app
 cask "claude-code" # Claude Code CLI
-cask "cursor" # Code Editor
 cask "docker-desktop" # Docker Desktop
-cask "font-meslo-lg-nerd-font" # Nerd Font for Powerlevel10k icons (Cursor terminal uses MesloLGS NF)
+cask "font-meslo-lg-nerd-font" # Nerd Font for Powerlevel10k icons (MesloLGS NF)
 cask "font-monaspace" # Font
 cask "gcloud-cli" # Google Cloud CLI
 cask "imageoptim" # Image Optimizer

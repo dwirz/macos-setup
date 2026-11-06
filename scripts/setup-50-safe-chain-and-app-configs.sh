@@ -1,5 +1,4 @@
 # Safe Chain and app/editor theme copies (sourced by ../setup.sh).
-# The Cursor profile (configs/cursor.code-profile) is imported by hand; see README manual steps.
 
 # Safe Chain (https://github.com/AikidoSec/safe-chain): pinned release + checksum verify.
 # Trust model: we only execute the installer after SHA256 matches the value recorded below

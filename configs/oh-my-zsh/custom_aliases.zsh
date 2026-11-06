@@ -1,8 +1,8 @@
 # ZSH Aliases
-alias profile="cursor ~/.zshrc" # Opens the bash profile file
-alias aliases="cursor ~/.oh-my-zsh/custom/custom_aliases.zsh" # Open this file
-alias functions="cursor ~/.oh-my-zsh/custom/custom_functions.zsh" # Open functions file
-alias envvars="cursor ~/.oh-my-zsh/custom/custom_env_variables.zsh" # Open env variables file
+alias profile="code ~/.zshrc" # Open the zsh profile file
+alias aliases="code ~/.oh-my-zsh/custom/custom_aliases.zsh" # Open this file
+alias functions="code ~/.oh-my-zsh/custom/custom_functions.zsh" # Open functions file
+alias envvars="code ~/.oh-my-zsh/custom/custom_env_variables.zsh" # Open env variables file
 
 # Directory Aliases
 alias ..="cd .." # Change directories
@@ -22,8 +22,8 @@ alias nccat="grep -v \"^\s*#\"" # Show file contents without comments
 # File Aliases
 alias f="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'" # Fuzzy search files
 alias fcat='bat $(f)' # Fuzzy search a file and open it in bat
-alias fcode='cursor $(f)' # Fuzzy search a file and open it in cursor
-alias hosts="cursor /private/etc/hosts" # Open hosts file
+alias fcode='code $(f)' # Fuzzy search a file and open it in VS Code
+alias hosts="code /private/etc/hosts" # Open hosts file
 alias cat="bat" # Use bat as cat
 
 # Node Aliases
