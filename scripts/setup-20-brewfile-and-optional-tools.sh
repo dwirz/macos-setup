@@ -1,4 +1,4 @@
-# Brewfile, OpenScreen, U.S. with German Umlauts, tmbliss (sourced by ../setup.sh).
+# Brewfile, U.S. with German Umlauts, tmbliss (sourced by ../setup.sh).
 # fzf shell integration is loaded by configs/.zshrc-custom (`source <(fzf --zsh)`); its
 # install script is not run because it would append to ~/.zshrc, which is a symlink into this repo.
 
@@ -12,15 +12,6 @@ fi
 print_step "Mac App Store apps (mas; optional, non-fatal if not signed in)"
 ensure_brew_shellenv
 mas_install_optional 506189836 "Harvest"
-
-print_step "Installing OpenScreen helper tool"
-OPENSCREEN_SETUP_SCRIPT="${SETUP_ROOT}/scripts/install-openscreen.sh"
-if [ -f "$OPENSCREEN_SETUP_SCRIPT" ]; then
-  chmod +x "$OPENSCREEN_SETUP_SCRIPT"
-  "$OPENSCREEN_SETUP_SCRIPT" || echo "Note: OpenScreen install failed; continuing setup."
-else
-  echo "Skipping OpenScreen install: $OPENSCREEN_SETUP_SCRIPT not found."
-fi
 
 print_step "Installing U.S. with German Umlauts keyboard layout"
 US_UMLAUTS_SCRIPT="${SETUP_ROOT}/scripts/install-us-with-german-umlauts.sh"

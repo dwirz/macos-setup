@@ -1,5 +1,6 @@
 tap "hashicorp/tap"
 tap "netbirdio/tap"
+tap "phibrowser/tap"
 tap "reeywhaar/tap"
 
 # Tools
@@ -13,7 +14,6 @@ brew "git" # Git
 brew "graphicsmagick" # Image Processing
 brew "hashicorp/tap/terraform" # Terraform
 brew "jq" # JSON Processing
-brew "libmagic" # Native lib for python-magic / install-release (OpenScreen)
 brew "lima" # Linux VMs
 brew "mas" # Mac App Store CLI
 brew "nvm" # Node Version Manager
@@ -29,6 +29,7 @@ cask "arc" # Discontinued upstream; Homebrew marks it deprecated
 cask "brave-browser"
 cask "firefox"
 cask "google-chrome"
+cask "phibrowser/tap/phi" # Chromium browser with AI assistant (Apple Silicon, macOS 14+)
 
 ## Productivity
 cask "1password" # Password Manager
@@ -41,6 +42,7 @@ cask "little-snitch" # Firewall & Network Monitoring
 cask "meetingbar" # Preview Meetings in Menu Bar
 cask "netbirdio/tap/netbird-ui" # VPN
 cask "notunes" # Prevent iTunes or Apple Music from launching on ▶️-Button
+cask "openscreen" # Screen recorder & demo editor (maintained fork: getopenscreen/openscreen)
 cask "raindropio" # Bookmark Manager
 cask "raycast" # Better Spotlight
 cask "reader" # Read Later Tool

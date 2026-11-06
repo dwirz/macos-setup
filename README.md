@@ -32,7 +32,6 @@ The script is **interactive** in places: it asks for your name, email, domain, a
 | Xcode CLT | Ensures command-line tools are installed |
 | Homebrew | Installs Homebrew and runs `brew bundle` from [`Brewfile`](Brewfile) (CLI packages and cask apps). A failing cask is reported but does not stop the setup. |
 | Oh My Zsh | Installs Oh My Zsh, **symlinks** `~/.zshrc` to [`configs/.zshrc-custom`](configs/.zshrc-custom) (an existing regular `~/.zshrc` is moved to `~/.zshrc.backup-<timestamp>`) and files from [`configs/oh-my-zsh/`](configs/oh-my-zsh/) into `~/.oh-my-zsh/custom/` |
-| OpenScreen | Runs [`scripts/install-openscreen.sh`](scripts/install-openscreen.sh) if present |
 | fzf | Key bindings and completion load from `~/.zshrc` via `source <(fzf --zsh)`; no install script is run (it would append to the symlinked `~/.zshrc`) |
 | Shell plugins | **autojump** is enabled in the Oh My Zsh `plugins` list in [`configs/.zshrc-custom`](configs/.zshrc-custom); the `autojump` formula is in [`Brewfile`](Brewfile) |
 | Profile | [`scripts/setup-dev-profile.sh`](scripts/setup-dev-profile.sh): nvm LTS Node in `~/.nvm` (default alias `lts/*`), global npm author fields, optional `npm adduser`, global Git user and a `lg` log alias |
