@@ -3,7 +3,6 @@ alias profile="cursor ~/.zshrc" # Opens the bash profile file
 alias aliases="cursor ~/.oh-my-zsh/custom/custom_aliases.zsh" # Open this file
 alias functions="cursor ~/.oh-my-zsh/custom/custom_functions.zsh" # Open functions file
 alias envvars="cursor ~/.oh-my-zsh/custom/custom_env_variables.zsh" # Open env variables file
-alias startup="cursor ~/.oh-my-zsh/custom/custom_startup.zsh" # Open startup file
 
 # Directory Aliases
 alias ..="cd .." # Change directories
@@ -13,9 +12,7 @@ alias ls="eza -a" # Short list files and directories
 
 # System Aliases
 alias df='df -h' # Human readable free disk space
-alias du='ncdu' # Human readable disk space stats
 alias cpu="top -o cpu" # Display cpu usage
-alias btop="btop -lc" # Better version of top
 
 # Console Aliases
 alias cls="clear"
@@ -35,9 +32,10 @@ alias nrd="nr dev"
 alias nci="npm ci"
 
 # Docker Aliases
-alias docker-stop-all="docker stop $(docker ps -q)"
-alias docker-rm-all="docker rm $(docker ps -a -q)"
-alias docker-rm-all-imgs="docker rmi $(docker images -q)"
+# Single quotes: the $(...) must run when the alias is used, not when the shell starts
+alias docker-stop-all='docker stop $(docker ps -q)'
+alias docker-rm-all='docker rm $(docker ps -a -q)'
+alias docker-rm-all-imgs='docker rmi $(docker images -q)'
 
 # Git Aliases
 alias setup-main='
@@ -48,40 +46,13 @@ alias setup-main='
   echo "origin/HEAD is now: $(git symbolic-ref refs/remotes/origin/HEAD | sed \"s@^refs/remotes/origin/@@\")"
 '
 alias main='((git add -A && git stash) || true) && git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@") && git pull'
-alias rebase='BRANCH=$(git symbolic-ref --short HEAD) && main && git checkout $BRANCH && git rebase $(git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@") && git stash pop'
+# Pops the stash only if `main` actually created one (otherwise an older, unrelated stash would be applied)
+alias rebase='BRANCH=$(git symbolic-ref --short HEAD) && STASH_BEFORE=$(git rev-parse -q --verify refs/stash || true) && main && git checkout $BRANCH && git rebase $(git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@") && if [ "$(git rev-parse -q --verify refs/stash || true)" != "$STASH_BEFORE" ]; then git stash pop; fi'
 
 # Netbird aliases
-alias bird-link-pin='netbird expose 3000 --with-pin 608005'
+# PIN comes from NETBIRD_EXPOSE_PIN (set it in ~/.env, which is not in this repo)
+alias bird-link-pin='netbird expose 3000 --with-pin "${NETBIRD_EXPOSE_PIN:?set NETBIRD_EXPOSE_PIN in ~/.env}"'
 alias bird-link-team='netbird expose 3000 --with-user-groups smartive'
-
-# Headroom — safe local proxy for Cursor BYOK (localhost, no persistence, no telemetry)
-headroom:cursor() {
-  export HEADROOM_TELEMETRY=off
-  export HEADROOM_UPDATE_CHECK=off
-  export HEADROOM_HOST=127.0.0.1
-  export HEADROOM_PORT=8787
-  export HEADROOM_CCR_BACKEND=memory
-  export HEADROOM_STATELESS=true
-  unset HEADROOM_LOG_MESSAGES HEADROOM_LOG_FILE
-
-  if ! command -v headroom >/dev/null 2>&1; then
-    local install_script="${MACOS_SETUP_ROOT:-${HOME}/projects/private/macos-setup}/scripts/install-headroom.sh"
-    if [ -x "${install_script}" ]; then
-      "${install_script}" || return 127
-    else
-      echo "headroom not found and install script missing: ${install_script}"
-      return 127
-    fi
-    command -v headroom >/dev/null 2>&1 || {
-      echo "headroom still not on PATH after install; open a new shell or ensure ~/.local/bin is on PATH"
-      return 127
-    }
-  fi
-
-  echo "Starting Headroom (safe local). First load may take 30–90s."
-  echo "Paste printed OpenAI/Anthropic base URLs into Cursor → Settings → Models (BYOK + overrides)."
-  headroom wrap cursor --port "${HEADROOM_PORT}"
-}
 
 # Other Aliases
 alias tf="terraform"

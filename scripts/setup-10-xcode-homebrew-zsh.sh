@@ -27,10 +27,16 @@ if [ -d "$OMZ_DIR" ]; then
 else
   # --unattended: no exec zsh at the end (would abort the rest of setup.sh), no chsh/sudo
   # prompts, no .zshrc overwrite prompt — safe for CI and non-interactive runs.
-  run_or_die "oh-my-zsh install" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  run_or_die "oh-my-zsh install" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
 print_step "Linking ~/.zshrc and Oh My Zsh custom configs"
+# Keep a real ~/.zshrc (not our symlink) instead of silently replacing it.
+if [ -e "${HOME}/.zshrc" ] && [ ! -L "${HOME}/.zshrc" ]; then
+  ZSHRC_BACKUP="${HOME}/.zshrc.backup-$(date +%Y%m%d%H%M%S)"
+  mv "${HOME}/.zshrc" "${ZSHRC_BACKUP}"
+  echo "Moved existing ~/.zshrc to ${ZSHRC_BACKUP}"
+fi
 ln -sf "${SETUP_ROOT}/configs/.zshrc-custom" "${HOME}/.zshrc"
 ln -sf "${SETUP_ROOT}/configs/oh-my-zsh/custom_aliases.zsh" "${HOME}/.oh-my-zsh/custom/custom_aliases.zsh"
 ln -sf "${SETUP_ROOT}/configs/oh-my-zsh/custom_env_variables.zsh" "${HOME}/.oh-my-zsh/custom/custom_env_variables.zsh"

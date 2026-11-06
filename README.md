@@ -30,17 +30,17 @@ The script is **interactive** in places: it asks for your name, email, domain, a
 | Step | What happens |
 |------|----------------|
 | Xcode CLT | Ensures command-line tools are installed |
-| Homebrew | Installs Homebrew and runs `brew bundle` from [`Brewfile`](Brewfile) (CLI packages and cask apps) |
-| Oh My Zsh | Installs Oh My Zsh and **symlinks** files from [`configs/oh-my-zsh/`](configs/oh-my-zsh/) into `~/.oh-my-zsh/custom/` |
+| Homebrew | Installs Homebrew and runs `brew bundle` from [`Brewfile`](Brewfile) (CLI packages and cask apps). A failing cask is reported but does not stop the setup. |
+| Oh My Zsh | Installs Oh My Zsh, **symlinks** `~/.zshrc` to [`configs/.zshrc-custom`](configs/.zshrc-custom) (an existing regular `~/.zshrc` is moved to `~/.zshrc.backup-<timestamp>`) and files from [`configs/oh-my-zsh/`](configs/oh-my-zsh/) into `~/.oh-my-zsh/custom/` |
 | OpenScreen | Runs [`scripts/install-openscreen.sh`](scripts/install-openscreen.sh) if present |
-| fzf | Runs Homebrew’s fzf install script (`--all`) when available |
-| Shell plugins | **autojump** is enabled in [`configs/oh-my-zsh/custom_startup.zsh`](configs/oh-my-zsh/custom_startup.zsh); the `autojump` formula is in [`Brewfile`](Brewfile) |
-| Profile | [`scripts/setup-dev-profile.sh`](scripts/setup-dev-profile.sh): nvm LTS Node, global npm author fields, optional `npm adduser`, global Git user and a `lg` log alias |
+| fzf | Key bindings and completion load from `~/.zshrc` via `source <(fzf --zsh)`; no install script is run (it would append to the symlinked `~/.zshrc`) |
+| Shell plugins | **autojump** is enabled in the Oh My Zsh `plugins` list in [`configs/.zshrc-custom`](configs/.zshrc-custom); the `autojump` formula is in [`Brewfile`](Brewfile) |
+| Profile | [`scripts/setup-dev-profile.sh`](scripts/setup-dev-profile.sh): nvm LTS Node in `~/.nvm` (default alias `lts/*`), global npm author fields, optional `npm adduser`, global Git user and a `lg` log alias |
 | SSH | [`scripts/setup-ssh.sh`](scripts/setup-ssh.sh): interactive SSH key setup (GitHub-oriented flow) |
 | Safe Chain | Installs [Safe Chain](https://github.com/AikidoSec/safe-chain) with a **pinned version and checksum** (see `install_safe_chain` in [`scripts/setup-50-safe-chain-and-app-configs.sh`](scripts/setup-50-safe-chain-and-app-configs.sh) to upgrade) |
-| Config files | Copies Cursor profile, Warp theme, and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) config from `configs/` |
+| Config files | Copies the Warp theme and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) config from `configs/` (an existing, different `~/.p10k.zsh` is backed up first). The Cursor profile is imported by hand (see below). |
 | Browser extensions | [`scripts/install-chrome-extensions.sh`](scripts/install-chrome-extensions.sh) via [`scripts/setup-52-chrome-extensions.sh`](scripts/setup-52-chrome-extensions.sh): writes **External Extensions** JSON for **Google Chrome** and **Arc** (Web Store IDs in the script). Set `SKIP_BROWSER_EXTENSIONS=1` before `./setup.sh` to skip. |
-| macOS | [`scripts/macos-settings.sh`](scripts/macos-settings.sh) with `sudo`: grouped **defaults** (see `--help`). In a normal terminal you are **prompted per section**; non-interactive runs apply **all** sections. From `setup.sh`, set `MACOS_SETTINGS_ALL=1` to skip prompts, or `MACOS_SETTINGS_SECTIONS=appearance,dock,finder` (example) for a fixed subset. |
+| macOS | [`scripts/macos-settings.sh`](scripts/macos-settings.sh) as your user (it asks for `sudo` only for the computer name and `remove_media`): grouped **defaults** (see `--help`). In a normal terminal you are **prompted per section**; `--all` and non-interactive runs apply every section **except the destructive `remove_media`**, which runs only when chosen at the prompt or named in `--sections`. From `setup.sh`, set `MACOS_SETTINGS_ALL=1` to skip prompts, or `MACOS_SETTINGS_SECTIONS=appearance,dock,finder` (example) for a fixed subset. |
 
 At the end it **runs `zsh -c 'source ~/.zshrc'`** to validate the shell config (bash cannot load Oh My Zsh; a non-zero exit there is non-fatal) and prints a **one-line pointer** to the [manual steps after setup](#manual-steps-after-setup) section below.
 
@@ -96,16 +96,19 @@ echo "Post-setup checklist: ${PWD}/README.md#manual-steps-after-setup"
 
 - Admin UI (optional): https://netbird.smarties.app/
 
+### Cursor profile
+
+- Cursor → **Settings → Profiles → Import Profile** → choose `configs/cursor.code-profile` (under this repo’s root).
+- The profile contains paths under `/Users/dwirz`; adjust them if your username differs.
+
+### NetBird expose PIN
+
+- `bird-link-pin` reads the PIN from `NETBIRD_EXPOSE_PIN`. Add `NETBIRD_EXPOSE_PIN=<pin>` to `~/.env` (loaded by `~/.zshrc`, not part of this repo).
+
 ### Browser extensions (Chrome and Arc)
 
 - Fully quit and reopen Chrome and Arc so Web Store extensions install from the manifests written by setup.
 - Local extension **GitLab MR Page Shortcuts**: open `chrome://extensions` (or Arc’s extensions page), enable **Developer mode**, **Load unpacked** → `configs/chrome-extensions/gitlab-merge-request` (under this repo’s root)
-
-### Headroom + Cursor (one-time)
-
-- From a project directory, run `headroom:cursor` (installs Headroom via pipx on first use if needed).
-- Wait for **Proxy ready**, then in **Cursor → Settings → Models**: add your OpenAI/Anthropic API keys and set **Override base URL** to the URLs the proxy prints (BYOK models only).
-- Revert base URL overrides when you are done with client work.
 
 ## Customizing
 
@@ -116,11 +119,11 @@ echo "Post-setup checklist: ${PWD}/README.md#manual-steps-after-setup"
 
 ### If you fork this repo
 
-[`configs/cursor.code-profile`](configs/cursor.code-profile) is tailored to this author’s machine. Replace **hardcoded paths** before using it elsewhere.
+[`configs/cursor.code-profile`](configs/cursor.code-profile) is tailored to this author’s machine (paths under `/Users/dwirz`). Replace **hardcoded paths** before importing it elsewhere.
 
 ## Re-running safely
 
-Re-running `./setup.sh` may **overwrite** symlinks and some copied files, re-apply `defaults`, and repeat installers that are idempotent (Homebrew, Oh My Zsh). Review [`setup.sh`](setup.sh) and the numbered [`scripts/setup-*.sh`](scripts/) steps before relying on it on a machine you already use daily.
+Re-running `./setup.sh` may **overwrite** symlinks and some copied files (a regular `~/.zshrc` and a changed `~/.p10k.zsh` are backed up first), re-apply `defaults`, and repeat installers that are idempotent (Homebrew, Oh My Zsh). Review [`setup.sh`](setup.sh) and the numbered [`scripts/setup-*.sh`](scripts/) steps before relying on it on a machine you already use daily.
 
 ## License
 

@@ -8,26 +8,24 @@ brew "bat" # Better cat
 brew "cloud-sql-proxy" # Cloud SQL Proxy
 brew "eza" # Better ls (exa successor)
 brew "fzf" # CLI fuzzy finder
+brew "gh" # GitHub CLI
 brew "git" # Git
 brew "graphicsmagick" # Image Processing
 brew "hashicorp/tap/terraform" # Terraform
 brew "jq" # JSON Processing
 brew "libmagic" # Native lib for python-magic / install-release (OpenScreen)
+brew "lima" # Linux VMs
 brew "mas" # Mac App Store CLI
 brew "nvm" # Node Version Manager
-brew "pipx" # Isolated Python CLI installs
 brew "powerlevel10k" # Theme for ZSH
-brew "python@3.13" # Python for pipx install
-brew "pure" # Shell Prompt
 brew "reeywhaar/tap/tmbliss" # Exclude files from Time Machine backups https://github.com/Reeywhaar/tmbliss/blob/main/readme.md
 brew "rustup" # Rust
 brew "trivy" # Security Scanner
 brew "wget" # Web Downloader
-brew "zsh-async" # Zsh Async
 
 # Applications
 ## Browsers
-cask "arc"
+cask "arc" # Discontinued upstream; Homebrew marks it deprecated
 cask "brave-browser"
 cask "firefox"
 cask "google-chrome"
@@ -39,7 +37,6 @@ cask "caffeine" # Prevent Sleep
 cask "figma" # Design Tool
 cask "hiddenbar" # Hide Icons in Menu Bar
 cask "kap" # Screen Recording
-cask "loom" # Video Recording
 cask "little-snitch" # Firewall & Network Monitoring
 cask "meetingbar" # Preview Meetings in Menu Bar
 cask "netbirdio/tap/netbird-ui" # VPN
@@ -56,8 +53,11 @@ cask "vlc" # Media Player
 cask "whatsapp" # Communication Tool
 
 ## Devtools
+cask "claude" # Claude desktop app
+cask "claude-code" # Claude Code CLI
 cask "cursor" # Code Editor
 cask "docker-desktop" # Docker Desktop
+cask "font-meslo-lg-nerd-font" # Nerd Font for Powerlevel10k icons (Cursor terminal uses MesloLGS NF)
 cask "font-monaspace" # Font
 cask "gcloud-cli" # Google Cloud CLI
 cask "imageoptim" # Image Optimizer
@@ -66,3 +66,4 @@ cask "postman" # API Testing
 cask "tableplus" # Database Management
 cask "visual-studio-code" # Code Editor
 cask "warp" # Terminal
+cask "xbar" # Script output in the menu bar

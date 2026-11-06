@@ -32,13 +32,12 @@ CHROME_EXTENSION_IDS=(
   ndlbedplllcgconngcnfmkadhokfaaln    # GraphQL Network Inspector
   bcjindcccaagfpapjjmafapmmgkkhgoa    # JSON Formatter
   aicmkgpgakddgnaphhhpliifpcfhicfo    # Postman Interceptor
-  chlffgpmiacpedhhbkiomidkjlcfhogd    # Pushbullet
   ldgfbffkinooeloadekpmfoklnobpien    # Raindrop.io
   fmkadmapgofadopljbjfkapdkoienihi    # React Developer Tools
   jjhefcfhmnkfeepcpnilbbkaadhngkbi    # Readwise Highlighter
   lmhkpmbekcpmknklioeibfkpmmfibljd    # Redux DevTools
   jcejahepddjnppkhomnidalpnnnemomn    # RSC Devtools
-  cjpalhdlnbpafiamejdnhcphjbkeiagm    # uBlock Origin
+  ddkjiahejlhfcafbddmgiahcphecmpfh    # uBlock Origin Lite (uBlock Origin is MV2 and no longer in the Web Store)
 )
 
 die() {

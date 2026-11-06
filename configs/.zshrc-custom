@@ -7,6 +7,12 @@ case ${ZSH_VERSION-} in
   '') return 0 ;;
 esac
 
+# Powerlevel10k instant prompt. Must stay near the top: everything below runs after the
+# prompt is already drawn. Code that needs console input must go above this block.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # Homebrew shell setup (Apple Silicon + Intel fallback)
 if [[ -x /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -14,61 +20,51 @@ elif [[ -x /usr/local/bin/brew ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
-# Add SSH keys to the agent: every private key file in ~/.ssh (e.g. id_ed25519, github), then keychain identities
-for key in ~/.ssh/*(N); do
-  [[ -f "$key" && -r "$key" ]] || continue
-  [[ "$key" == *.pub ]] && continue
-  case "${key:t}" in
-    known_hosts|authorized_keys|config|.DS_Store) continue ;;
-  esac
-  read -r first < "$key" || continue
-  [[ "$first" == *PRIVATE*KEY* ]] || continue
-  ssh-add --apple-use-keychain "$key" &> /dev/null
-done
-ssh-add -A &> /dev/null
+# SSH: load keys whose passphrases are stored in the macOS keychain. New keys are added
+# on first use via "AddKeysToAgent yes" + "UseKeychain yes" in ~/.ssh/config (setup-ssh.sh).
+ssh-add --apple-load-keychain &> /dev/null
 
 # Update PATHs
 export DOCKER_BIN=$HOME/.docker/bin
 export PATH="$DOCKER_BIN:$PATH"
 
-# nvm from manual install OR Homebrew install
+# nvm: Node versions live in ~/.nvm (outside the Homebrew keg, so `brew upgrade nvm` keeps them).
 export NVM_DIR="$HOME/.nvm"
 if [[ -s "$NVM_DIR/nvm.sh" ]]; then
   . "$NVM_DIR/nvm.sh"
-elif [[ -s "$(brew --prefix nvm)/nvm.sh" ]]; then
-  . "$(brew --prefix nvm)/nvm.sh"
+elif [[ -n "${HOMEBREW_PREFIX-}" && -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ]]; then
+  . "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
 fi
 
-# Homebrew setup
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-# Oh My Zsh setup
+# Oh My Zsh setup (ZSH_THEME must be set before oh-my-zsh.sh; the prompt comes from Powerlevel10k)
 export ZSH="${HOME}/.oh-my-zsh"
-plugins=(git autojump docker docker-compose)
-fpath+=("$(brew --prefix)/share/zsh/site-functions")
-source "$ZSH/oh-my-zsh.sh"
 ZSH_THEME=""
+plugins=(git autojump docker docker-compose)
+[[ -n "${HOMEBREW_PREFIX-}" ]] && fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
+source "$ZSH/oh-my-zsh.sh"
 
 # Powerlevel10k setup
 # https://github.com/romkatv/powerlevel10k
 source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Aikido setup
-source ~/.safe-chain/scripts/init-posix.sh
+# fzf key bindings (Ctrl-R, Ctrl-T, Alt-C) and completion
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
+
+# Aikido Safe Chain (installed by setup-50)
+[[ -f ~/.safe-chain/scripts/init-posix.sh ]] && source ~/.safe-chain/scripts/init-posix.sh
 
 # Run nvm use when entering a directory with a .nvmrc file
-autoload -Uz add-zsh-hook
-add-zsh-hook chpwd nvm_auto_use
 function nvm_auto_use() {
   if [[ -f .nvmrc ]]; then
     nvm use
   fi
 }
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd nvm_auto_use
 
 
 # Welcome the user

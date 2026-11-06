@@ -6,15 +6,16 @@ NAME="${1:-Your Name}"
 EMAIL="${2:-you@your-domain.com}"
 DOMAIN="${3:-your-domain.com}"
 
-# Load nvm (Homebrew installs to $(brew --prefix nvm); manual install uses ~/.nvm)
-if [ -s "${HOME}/.nvm/nvm.sh" ]; then
-  export NVM_DIR="${HOME}/.nvm"
+# Load nvm. Node versions always go to ~/.nvm, the same NVM_DIR as configs/.zshrc-custom.
+# (Homebrew's nvm caveat: NVM_DIR must not be inside the keg, or `brew upgrade nvm` drops them.)
+export NVM_DIR="${HOME}/.nvm"
+mkdir -p "${NVM_DIR}"
+if [ -s "${NVM_DIR}/nvm.sh" ]; then
   # shellcheck source=/dev/null
   . "${NVM_DIR}/nvm.sh"
 elif command -v brew >/dev/null 2>&1; then
   _NVM_PREFIX="$(brew --prefix nvm 2>/dev/null || true)"
   if [ -n "${_NVM_PREFIX}" ] && [ -s "${_NVM_PREFIX}/nvm.sh" ]; then
-    export NVM_DIR="${_NVM_PREFIX}"
     # shellcheck source=/dev/null
     . "${_NVM_PREFIX}/nvm.sh"
   fi
@@ -30,8 +31,8 @@ fi
 nvm install --lts
 # Use the latest node version
 nvm use --lts
-# Set current node version as default
-nvm alias default node
+# Make the newest installed LTS the default (`node` would follow any newer non-LTS install)
+nvm alias default 'lts/*'
 # Install latest npm
 npm i -g npm@latest
 # Set npm init author name, email and url
