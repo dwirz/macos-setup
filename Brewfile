@@ -15,7 +15,9 @@ brew "jq" # JSON Processing
 brew "libmagic" # Native lib for python-magic / install-release (OpenScreen)
 brew "mas" # Mac App Store CLI
 brew "nvm" # Node Version Manager
+brew "pipx" # Isolated Python CLI installs
 brew "powerlevel10k" # Theme for ZSH
+brew "python@3.13" # Python for pipx install
 brew "pure" # Shell Prompt
 brew "reeywhaar/tap/tmbliss" # Exclude files from Time Machine backups https://github.com/Reeywhaar/tmbliss/blob/main/readme.md
 brew "rustup" # Rust

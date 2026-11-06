@@ -54,6 +54,35 @@ alias rebase='BRANCH=$(git symbolic-ref --short HEAD) && main && git checkout $B
 alias bird-link-pin='netbird expose 3000 --with-pin 608005'
 alias bird-link-team='netbird expose 3000 --with-user-groups smartive'
 
+# Headroom — safe local proxy for Cursor BYOK (localhost, no persistence, no telemetry)
+headroom:cursor() {
+  export HEADROOM_TELEMETRY=off
+  export HEADROOM_UPDATE_CHECK=off
+  export HEADROOM_HOST=127.0.0.1
+  export HEADROOM_PORT=8787
+  export HEADROOM_CCR_BACKEND=memory
+  export HEADROOM_STATELESS=true
+  unset HEADROOM_LOG_MESSAGES HEADROOM_LOG_FILE
+
+  if ! command -v headroom >/dev/null 2>&1; then
+    local install_script="${MACOS_SETUP_ROOT:-${HOME}/projects/private/macos-setup}/scripts/install-headroom.sh"
+    if [ -x "${install_script}" ]; then
+      "${install_script}" || return 127
+    else
+      echo "headroom not found and install script missing: ${install_script}"
+      return 127
+    fi
+    command -v headroom >/dev/null 2>&1 || {
+      echo "headroom still not on PATH after install; open a new shell or ensure ~/.local/bin is on PATH"
+      return 127
+    }
+  fi
+
+  echo "Starting Headroom (safe local). First load may take 30–90s."
+  echo "Paste printed OpenAI/Anthropic base URLs into Cursor → Settings → Models (BYOK + overrides)."
+  headroom wrap cursor --port "${HEADROOM_PORT}"
+}
+
 # Other Aliases
 alias tf="terraform"
 alias tmbliss-dev="tmbliss run --path ~/projects"

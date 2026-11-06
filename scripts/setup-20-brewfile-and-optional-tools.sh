@@ -7,6 +7,15 @@ print_step "Mac App Store apps (mas; optional, non-fatal if not signed in)"
 ensure_brew_shellenv
 mas_install_optional 506189836 "Harvest"
 
+print_step "Installing Headroom (pipx; safe local proxy for Cursor BYOK)"
+HEADROOM_SCRIPT="./scripts/install-headroom.sh"
+if [ -f "$HEADROOM_SCRIPT" ]; then
+  chmod +x "$HEADROOM_SCRIPT"
+  "$HEADROOM_SCRIPT" || echo "Note: Headroom install step exited non-zero; continuing setup."
+else
+  echo "Skipping Headroom install: $HEADROOM_SCRIPT not found."
+fi
+
 print_step "Installing OpenScreen helper tool"
 OPENSCREEN_SETUP_SCRIPT="./scripts/install-openscreen.sh"
 if [ -f "$OPENSCREEN_SETUP_SCRIPT" ]; then

@@ -101,6 +101,12 @@ echo "Post-setup checklist: ${PWD}/README.md#manual-steps-after-setup"
 - Fully quit and reopen Chrome and Arc so Web Store extensions install from the manifests written by setup.
 - Local extension **GitLab MR Page Shortcuts**: open `chrome://extensions` (or Arc’s extensions page), enable **Developer mode**, **Load unpacked** → `configs/chrome-extensions/gitlab-merge-request` (under this repo’s root)
 
+### Headroom + Cursor (one-time)
+
+- From a project directory, run `headroom:cursor` (installs Headroom via pipx on first use if needed).
+- Wait for **Proxy ready**, then in **Cursor → Settings → Models**: add your OpenAI/Anthropic API keys and set **Override base URL** to the URLs the proxy prints (BYOK models only).
+- Revert base URL overrides when you are done with client work.
+
 ## Customizing
 
 - **Apps and CLI tools**: edit [`Brewfile`](Brewfile), then run `brew bundle` (no need to re-run all of `setup.sh`).
