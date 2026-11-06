@@ -27,11 +27,8 @@ if [ -d "$OMZ_DIR" ]; then
 else
   # --unattended: no exec zsh at the end (would abort the rest of setup.sh), no chsh/sudo
   # prompts, no .zshrc overwrite prompt — safe for CI and non-interactive runs.
-  run_or_die "oh-my-zsh install" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  run_or_die "oh-my-zsh install" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
 print_step "Linking ~/.zshrc and Oh My Zsh custom configs"
-ln -sf "${SETUP_ROOT}/configs/.zshrc-custom" "${HOME}/.zshrc"
-ln -sf "${SETUP_ROOT}/configs/oh-my-zsh/custom_aliases.zsh" "${HOME}/.oh-my-zsh/custom/custom_aliases.zsh"
-ln -sf "${SETUP_ROOT}/configs/oh-my-zsh/custom_env_variables.zsh" "${HOME}/.oh-my-zsh/custom/custom_env_variables.zsh"
-ln -sf "${SETUP_ROOT}/configs/oh-my-zsh/custom_functions.zsh" "${HOME}/.oh-my-zsh/custom/custom_functions.zsh"
+run_or_die "Linking shell configs" link_shell_configs

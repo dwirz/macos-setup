@@ -91,6 +91,7 @@ fi
   echo ""
   echo "$MANAGED_BLOCK_START"
   echo "Host *"
+  echo "  IgnoreUnknown UseKeychain"
   echo "  AddKeysToAgent yes"
   echo "  UseKeychain yes"
   echo "  IdentityFile $KEY_PATH"

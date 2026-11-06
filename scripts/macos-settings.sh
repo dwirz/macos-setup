@@ -2,16 +2,20 @@
 set -euo pipefail
 
 # Computer name: optional last argument (used by the "sharing" section). Run
-# `sudo ./macos-settings.sh --help` for options and section ids.
+# `./macos-settings.sh --help` for options and section ids.
+#
+# Run as your user, not with sudo: `defaults write` changes the preferences of the user
+# running it, so under sudo the settings would go to root. Only the system-level commands
+# (computer name, removing apps) use sudo, and the script asks for it when needed.
 
 usage() {
   cat <<'EOF'
-Usage: sudo ./macos-settings.sh [options] [COMPUTER_NAME]
+Usage: ./macos-settings.sh [options] [COMPUTER_NAME]
 
 Apply grouped macOS defaults. COMPUTER_NAME is used by the "sharing" section.
 
 Options:
-  --all, -a              Apply every section (no prompts).
+  --all, -a              Apply every section except remove_media (no prompts).
   --sections LIST        Comma-separated section ids (no prompts).
   --help, -h             Show this help.
 
@@ -23,11 +27,12 @@ Section ids:
   trackpad      Tap to click, speed, scroll
   keyboard      Smart punctuation off, Spotlight hotkey for Raycast
   finder        Downloads default, hidden files, trash, desktop
-  sharing       Computer name, disable file sharing
-  remove_media  Remove iMovie/GarageBand and Apple sound libraries (destructive)
+  sharing       Computer name (sudo)
+  remove_media  Remove iMovie/GarageBand and Apple sound libraries (destructive, sudo;
+                only when chosen at the prompt or named in --sections)
 
-If stdin is not a terminal and you do not pass --sections or --all, all sections
-are applied (avoids blocking on prompts).
+If stdin is not a terminal and you do not pass --sections or --all, the same
+sections as --all are applied (avoids blocking on prompts).
 EOF
 }
 
@@ -84,13 +89,15 @@ section_label() {
     trackpad) echo "Trackpad & mouse (tap to click, speed, scroll)" ;;
     keyboard) echo "Keyboard (smart punctuation off, disable Cmd+Space Spotlight for Raycast)" ;;
     finder) echo "Finder (downloads default, hidden files, trash, desktop icons)" ;;
-    sharing) echo "Sharing & networking (computer name, disable file sharing)" ;;
+    sharing) echo "Sharing (computer name)" ;;
     remove_media) echo "Remove iMovie, GarageBand, and Apple sound library paths (destructive)" ;;
     *) echo "Unknown" ;;
   esac
 }
 
 VALID_SECTIONS=(appearance dock battery siri trackpad keyboard finder sharing remove_media)
+# Applied by --all and non-interactive runs: everything except the destructive remove_media.
+DEFAULT_SECTIONS=(appearance dock battery siri trackpad keyboard finder sharing)
 
 is_valid_section() {
   local s
@@ -137,16 +144,16 @@ decide_sections() {
     return
   fi
   if $ALL; then
-    SELECTED_SECTIONS=("${VALID_SECTIONS[@]}")
+    SELECTED_SECTIONS=("${DEFAULT_SECTIONS[@]}")
     return
   fi
   if [[ -t 0 ]]; then
     prompt_sections
     return
   fi
-  # Non-interactive stdin: apply everything so automated runs do not hang on read
-  echo "Non-interactive stdin: applying all sections. Use --sections=... or run in a terminal for prompts." >&2
-  SELECTED_SECTIONS=("${VALID_SECTIONS[@]}")
+  # Non-interactive stdin: apply the default sections so automated runs do not hang on read
+  echo "Non-interactive stdin: applying all sections except remove_media. Use --sections=... or run in a terminal for prompts." >&2
+  SELECTED_SECTIONS=("${DEFAULT_SECTIONS[@]}")
 }
 
 should_run() {
@@ -160,7 +167,8 @@ should_run() {
 
 section_appearance() {
   defaults write com.apple.screencapture type jpg
-  osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
+  osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true' ||
+    echo "Note: could not switch to dark mode (allow your terminal to control System Events under Privacy & Security → Automation)."
   defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
 }
 
@@ -179,7 +187,7 @@ section_dock() {
 
 section_battery() {
   defaults write com.apple.controlcenter "NSStatusItem Visible Battery" -bool true
-  defaults write com.apple.menuextra.battery ShowPercent -string "YES"
+  defaults -currentHost write com.apple.controlcenter BatteryShowPercentage -bool true
 }
 
 section_siri() {
@@ -213,7 +221,6 @@ section_finder() {
   defaults write com.apple.finder AppleShowAllFiles YES
   defaults write com.apple.finder ShowPathbar -bool true
   defaults write com.apple.finder ShowStatusBar -bool true
-  defaults write com.apple.finder EmptyTrashSecurely -bool false
   defaults write com.apple.finder "FXRemoveOldTrashItems" -bool true
   defaults write com.apple.finder ShowPreviewPane -bool true
   defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
@@ -228,8 +235,6 @@ section_sharing() {
   sudo scutil --set ComputerName "${COMPUTER_NAME}"
   sudo scutil --set LocalHostName "${LOCAL_HOST_NAME}"
   sudo scutil --set HostName "${LOCAL_HOST_NAME}"
-  sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.AppleFileServer.plist 2>/dev/null || true
-  sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.smbd.plist 2>/dev/null || true
 }
 
 section_remove_media() {
@@ -242,17 +247,19 @@ section_remove_media() {
 
 # --- main --------------------------------------------------------------------
 
-[[ "$(id -u)" -eq 0 ]] || die "Run with sudo."
-
-sudo -v
-
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+[[ "$(id -u)" -ne 0 ]] || die "Run as your user, not with sudo (defaults would be written for root). The script asks for sudo where needed."
 
 decide_sections
 
 if [[ ${#SELECTED_SECTIONS[@]} -eq 0 ]]; then
   echo "No sections selected. Nothing to do."
   exit 0
+fi
+
+# Ask for sudo once, up front, only when a selected section needs it; keep it alive meanwhile.
+if should_run sharing || should_run remove_media; then
+  sudo -v
+  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 fi
 
 echo "Applying sections: ${SELECTED_SECTIONS[*]}"
