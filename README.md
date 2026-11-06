@@ -23,6 +23,28 @@ Personal **macOS bootstrap** for a new machine: installs CLI tools and apps, wir
 
 The script is **interactive** in places: it asks for your name, email, domain, and computer name, runs SSH key setup, and may prompt for npm login.
 
+## Doctor: check, repair, clean up
+
+On a Mac that is already set up, use [`doctor.sh`](doctor.sh) instead of re-running `setup.sh`. It compares the machine with this repo and is safe to run any time:
+
+```bash
+./doctor.sh                  # check only, changes nothing
+./doctor.sh --fix            # also repair what is missing or broken
+./doctor.sh --cleanup        # also remove leftovers of tools this repo dropped (asks per item)
+./doctor.sh --fix --cleanup --yes   # both, without asking
+```
+
+| Area | Checks | `--fix` / `--cleanup` |
+|------|--------|-----------------------|
+| Leftovers | Headroom, the old OpenScreen venv and non-Homebrew `Openscreen.app`, Cursor, Loom, `pure`/`zsh-async`/`libmagic`, `pipx`/`python@3.13` (only when unused), Node versions inside Homebrew's nvm folder, old fzf files, stale browser-extension manifests | `--cleanup` removes them (apps go to the Trash) |
+| Homebrew | Command Line Tools, Homebrew, missing Brewfile entries, deprecated/disabled entries, packages installed outside the Brewfile | `--fix` runs `brew bundle install --no-upgrade`; untracked packages are only listed |
+| Shell | Oh My Zsh, `~/.zshrc` and custom-file symlinks, Powerlevel10k link, `~/.p10k.zsh`, uncommitted writes into the repo's shell configs, `~/.zshrc` load errors, fzf version | `--fix` installs and re-links; a customized `~/.p10k.zsh` is never overwritten |
+| Node | LTS installed in `~/.nvm`, nvm default `lts/*` | `--fix` installs LTS and sets the default |
+| SSH, Safe Chain, NetBird | `IgnoreUnknown UseKeychain` in the managed SSH block, Safe Chain, NetBird daemon, `NETBIRD_EXPOSE_PIN` in `~/.env` | `--fix` patches the SSH block and installs Safe Chain |
+| Extras | Chrome/Arc extension manifests, keyboard layout, tmbliss LaunchAgent, Git identity | `--fix` writes manifests, installs the layout, loads the LaunchAgent |
+
+Interactive steps (SSH key, tmbliss schedule, macOS defaults) are not re-run; the doctor prints the script to run instead. Exit code is `0` when nothing is left to do.
+
 ## What `setup.sh` does (overview)
 
 [`setup.sh`](setup.sh) is a thin orchestrator: it **sources** numbered steps under [`scripts/`](scripts/) in order (`setup-00-lib.sh` helpers, then `setup-10-*.sh` … `setup-70-*.sh`). Edit those files to change behavior for a given phase.
@@ -113,7 +135,7 @@ echo "Post-setup checklist: ${PWD}/README.md#manual-steps-after-setup"
 
 ## Re-running safely
 
-Re-running `./setup.sh` may **overwrite** symlinks and some copied files (a regular `~/.zshrc` and a changed `~/.p10k.zsh` are backed up first), re-apply `defaults`, and repeat installers that are idempotent (Homebrew, Oh My Zsh). Review [`setup.sh`](setup.sh) and the numbered [`scripts/setup-*.sh`](scripts/) steps before relying on it on a machine you already use daily.
+Re-running `./setup.sh` may **overwrite** symlinks and some copied files (a regular `~/.zshrc` and a changed `~/.p10k.zsh` are backed up first), re-apply `defaults`, and repeat installers that are idempotent (Homebrew, Oh My Zsh). Review [`setup.sh`](setup.sh) and the numbered [`scripts/setup-*.sh`](scripts/) steps before relying on it on a machine you already use daily. For an existing machine, prefer [`./doctor.sh`](#doctor-check-repair-clean-up).
 
 ## License
 
